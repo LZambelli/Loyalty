@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Loyalty</string>
+    <string name="imageViewLogo">Logo</string>
+    <string name="textViewAutenticandoActivityLogin">Autenticando...</string>
+    <string name="buttonActivityLogin">Login</string>
+    <string name="textViewCadastrarActivityLogin">Não possui cadastro? Cadastre-se</string>
+    <string name="hintEmail">Digite seu e-mail</string>
+    <string name="hintSenha">Digite sua senha</string>
+    <string name="textViewEsqueceuSenhaActivityLogin">Esqueceu sua senha?</string>
+    <string name="hintCelular">Digite o celular</string>
+    <string name="hintEndereco">Digite o endereço</string>
+    <string name="hintDescricao">Digite a descrição do estabelecimento</string>
+    <string name="estabelecimento">Estabelecimento</string>
+    <string name="buttonActivityCadastroUsuario">Cadastrar</string>
+    <string name="textViewJaPossuiCadastroActivityCadastroUsuario">Já possui cadastro? Faça o login</string>
+    <string name="hintNome">Digite seu nome ou do estabelecimento</string>
+    <string name="imageViewPerfil">Foto de perfil</string>
+    <string name="naoPossuiConexao">Você não possui conexão com internet</string>
+    <string name="erroPreenchimentoObrigatorio">Campo de preenchimento obrigatório</string>
+    <string name="preenchaTodosOsCampos">Preencha todos os campos indicados</string>
+    <string name="criando_perfil">Estamos criando seu perfil...</string>
+    <string name="aguarde">Aguarde</string>
+</resources>

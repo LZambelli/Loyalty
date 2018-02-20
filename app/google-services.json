@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "612989418115",
+    "firebase_url": "https://loyalty-pogiolli.firebaseio.com",
+    "project_id": "loyalty-pogiolli",
+    "storage_bucket": "loyalty-pogiolli.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612989418115:android:82546db096030bac",
+        "android_client_info": {
+          "package_name": "joaopogiolli.com.br.loyalty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612989418115-6jpi11e0bbbq1l1m1cebcc4fd6l9s635.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "joaopogiolli.com.br.loyalty",
+            "certificate_hash": "c5ef04a2f32a4ba4ad13d2eee1caf5ec02d38d1d"
+          }
+        },
+        {
+          "client_id": "612989418115-nlu62qjdtnk0o1etj2bvc2fbl5bgk3l4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9M_UdUIV2NdY-JhNM5wH87eaLzrCe5dI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612989418115-nlu62qjdtnk0o1etj2bvc2fbl5bgk3l4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

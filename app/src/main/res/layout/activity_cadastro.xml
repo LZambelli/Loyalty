@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="false"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:paddingEnd="60dp"
+            android:paddingStart="0dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewActivityCadastroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/imageViewPerfil"
+                android:maxHeight="200dp"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:src="@mipmap/ic_launcher" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/FloatingActionButtonFotoActivityCadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_action_camera_alt" />
+
+        </RelativeLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutNomeActivityCadastroUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hintNome"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextLabelErrorHint">
+
+            <EditText
+                android:id="@+id/editTextNomeActivityCadastroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutEmailActivityCadastroUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hintEmail"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextLabelErrorHint">
+
+            <EditText
+                android:id="@+id/editTextEmailActivityCadastroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutSenhaActivityCadastroUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hintSenha"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextLabelErrorHint"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/editTextSenhaActivityCadastroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutCelularActivityCadastroUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hintCelular"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextLabelErrorHint">
+
+            <EditText
+                android:id="@+id/editTextCelularActivityCadastroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutEstabelecimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutEnderecoActivityCadastroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/hintEndereco"
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/TextLabelErrorHint">
+
+                <EditText
+                    android:id="@+id/editTextEnderecoActivityCadastroUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutDescricaoActivityCadastroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/hintDescricao"
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/TextLabelErrorHint">
+
+                <EditText
+                    android:id="@+id/editTextDescricaoActivityCadastroUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textMultiLine"
+                    android:lines="8"
+                    android:maxLines="20"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:scrollbars="vertical" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/switchIsEstabelecimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="0dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/estabelecimento"
+            android:textColor="?android:attr/textColorHint"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/buttonActivityCadastroUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:paddingTop="16dp"
+            android:text="@string/buttonActivityCadastroUsuario"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/textViewJaPossuiCadastroActivityCadastroUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/textViewJaPossuiCadastroActivityCadastroUsuario"
+            android:textSize="16sp"
+            android:layout_marginBottom="32dp"/>
+    </LinearLayout>
+</ScrollView>

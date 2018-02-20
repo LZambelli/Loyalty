@@ -23,16 +23,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import br.com.jansenfelipe.androidmask.MaskEditTextChangedListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 import joaopogiolli.com.br.loyalty.Firebase.FirebaseUtils;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
+import joaopogiolli.com.br.loyalty.Models.Usuario;
 import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -65,6 +75,9 @@ public class CadastroActivity extends AppCompatActivity {
     private String descricao;
     private Uri resultUri;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +106,16 @@ public class CadastroActivity extends AppCompatActivity {
         }
     }
 
-    private void initView() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        firebaseDatabase = FirebaseUtils.getFirebaseDatabase(this);
+        databaseReference = FirebaseUtils.getDatabaseReference(firebaseDatabase);
         firebaseAuth = FirebaseUtils.getFirebaseAuth();
+        firebaseStorage = FirebaseUtils.getFirebaseStorage();
+    }
+
+    private void initView() {
         imageViewActivityCadastroUsuario = findViewById(R.id.imageViewActivityCadastroUsuario);
         FloatingActionButtonFotoActivityCadastro = findViewById(R.id.FloatingActionButtonFotoActivityCadastro);
         textInputLayoutNomeActivityCadastroUsuario = findViewById(R.id.textInputLayoutNomeActivityCadastroUsuario);
@@ -103,8 +124,13 @@ public class CadastroActivity extends AppCompatActivity {
         editTextEmailActivityCadastroUsuario = findViewById(R.id.editTextEmailActivityCadastroUsuario);
         textInputLayoutSenhaActivityCadastroUsuario = findViewById(R.id.textInputLayoutSenhaActivityCadastroUsuario);
         editTextSenhaActivityCadastroUsuario = findViewById(R.id.editTextSenhaActivityCadastroUsuario);
+
         textInputLayoutCelularActivityCadastroUsuario = findViewById(R.id.textInputLayoutCelularActivityCadastroUsuario);
         editTextCelularActivityCadastroUsuario = findViewById(R.id.editTextCelularActivityCadastroUsuario);
+        MaskEditTextChangedListener maskCelular = new MaskEditTextChangedListener("(##) #####-####",
+                editTextCelularActivityCadastroUsuario);
+        editTextCelularActivityCadastroUsuario.addTextChangedListener(maskCelular);
+
         textInputLayoutEnderecoActivityCadastroUsuario = findViewById(R.id.textInputLayoutEnderecoActivityCadastroUsuario);
         editTextEnderecoActivityCadastroUsuario = findViewById(R.id.editTextEnderecoActivityCadastroUsuario);
         textInputLayoutDescricaoActivityCadastroUsuario = findViewById(R.id.textInputLayoutDescricaoActivityCadastroUsuario);
@@ -146,7 +172,7 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (verificaCampos()) {
-                    progressDialog.setMessage(getString(R.string.aguarde));
+                    progressDialog.setTitle(getString(R.string.aguarde));
                     progressDialog.setMessage(getString(R.string.criando_perfil));
                     progressDialog.show();
                     if (ehEstabelecimento) {
@@ -171,6 +197,104 @@ public class CadastroActivity extends AppCompatActivity {
         startActivityForResult(intent, StaticUtils.COD_CROP);
     }
 
+    private void Toast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void createUserUsuario() {
+        firebaseAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(CadastroActivity.this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isComplete()) {
+                            if (task.isSuccessful()) {
+                                Usuario usuario = initUsuario(task.getResult().getUser().getUid());
+                                databaseReference.child(StaticUtils.TABELA_USUARIO)
+                                        .child(usuario.getId()).setValue(usuario);
+                                saveImage(null, usuario);
+                            } else {
+                                String erro = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                getErrorFirebaseAuth(erro);
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void createUserEstabelecimento() {
+        firebaseAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(CadastroActivity.this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isComplete()) {
+                            if (task.isSuccessful()) {
+                                Estabelecimento estabelecimento = initEstabelecimento(task.getResult().getUser().getUid());
+                                databaseReference.child(StaticUtils.TABELA_ESTABELECIMENTO)
+                                        .child(estabelecimento.getId()).setValue(estabelecimento);
+                                saveImage(estabelecimento, null);
+                            } else {
+                                String erro = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                getErrorFirebaseAuth(erro);
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void saveImage(Estabelecimento estabelecimento, Usuario usuario) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+        } catch (IOException e) {
+            Toast(getString(R.string.ErroGravarImagem));
+            e.printStackTrace();
+        }
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] data = byteArrayOutputStream.toByteArray();
+        String path = null;
+        if (ehEstabelecimento) {
+            path = StaticUtils.ESTABELECIMENTO_IMAGES + "/" + estabelecimento.getId() + ".png";
+        } else {
+            path = StaticUtils.PERFIL_IMAGES + "/" + usuario.getId() + ".png";
+        }
+        StorageReference storageReference = firebaseStorage.getReference(path);
+        UploadTask uploadTask = storageReference.putBytes(data);
+        uploadTask.addOnSuccessListener(CadastroActivity.this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
+                if (ehEstabelecimento) {
+                    Toast(getString(R.string.estabelecimentoCriadoSucesso));
+                } else {
+                    Toast(getString(R.string.usuarioCriadoSucesso));
+                }
+                CadastroActivity.this.finish();
+            }
+        });
+    }
+
+    private void getErrorFirebaseAuth(String error) {
+        switch (error) {
+            case StaticUtils.FIREBASE_AUTH_ERROR_EMAIL_ALREADY_IN_USE:
+                progressDialog.dismiss();
+                Toast(getString(R.string.EmailSendoUsado));
+                break;
+            case StaticUtils.FIREBASE_AUTH_ERROR_WEAK_PASSWORD:
+                progressDialog.dismiss();
+                Toast(getString(R.string.SenhaFraca));
+                break;
+            case StaticUtils.FIREBASE_AUTH_ERROR_INVALID_EMAIL:
+                progressDialog.dismiss();
+                Toast(getString(R.string.EmailInvalido));
+                break;
+            default:
+                Toast(getString(R.string.ErroCriarUsuario));
+                progressDialog.dismiss();
+                break;
+        }
+    }
+
     private boolean verificaCampos() {
         boolean retorno;
         nome = editTextNomeActivityCadastroUsuario.getText().toString();
@@ -188,6 +312,10 @@ public class CadastroActivity extends AppCompatActivity {
 
     private boolean verificaCamposUsuario() {
         boolean retorno = true;
+        if (resultUri == null) {
+            retorno = false;
+            Toast(getString(R.string.InsiraFotoPerfil));
+        }
         if (nome.isEmpty() || nome.equals(null)) {
             retorno = false;
             textInputLayoutNomeActivityCadastroUsuario.setHintTextAppearance(R.style.TextLabelErrorHint);
@@ -250,25 +378,25 @@ public class CadastroActivity extends AppCompatActivity {
         return retorno;
     }
 
-    private void Toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    private Estabelecimento initEstabelecimento(String id) {
+        Estabelecimento estabelecimento = new Estabelecimento();
+        estabelecimento.setId(id);
+        estabelecimento.setNome(nome);
+        estabelecimento.setEmail(email);
+        estabelecimento.setSenha(null);
+        estabelecimento.setCelular(celular);
+        estabelecimento.setEndereco(endereco);
+        estabelecimento.setDescricao(descricao);
+        return estabelecimento;
     }
 
-    private void createUserUsuario() {
-
+    private Usuario initUsuario(String id) {
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+        usuario.setNome(nome);
+        usuario.setEmail(email);
+        usuario.setSenha(null);
+        usuario.setCelular(celular);
+        return usuario;
     }
-
-    private void createUserEstabelecimento() {
-        firebaseAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(CadastroActivity.this,
-                new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                            Estabelecimento estabelecimento = new Estabelecimento();
-                            estabelecimento.setId(task.getResult().getUser().getUid());
-                        }
-                    }
-                });
-    }
-
 }

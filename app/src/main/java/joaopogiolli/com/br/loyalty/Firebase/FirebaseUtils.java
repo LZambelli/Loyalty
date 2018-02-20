@@ -16,10 +16,6 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class FirebaseUtils {
 
-    public static final String TABELA_USUARIO = "Usuarios";
-    public static final String TABELA_ESTABELECIMENTO = "Estabelecimentos";
-    public static final String TABELA_CARTAOES = "Cartoes";
-    public static final String TABELA_PROMOCAO = "Promocoes";
     private static FirebaseAuth firebaseAuth;
     private static FirebaseAuth.AuthStateListener authStateListener;
     private static FirebaseUser firebaseUser;

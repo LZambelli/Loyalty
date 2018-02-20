@@ -20,4 +20,13 @@
     <string name="preenchaTodosOsCampos">Preencha todos os campos indicados</string>
     <string name="criando_perfil">Estamos criando seu perfil...</string>
     <string name="aguarde">Aguarde</string>
+    <string name="estabelecimentoCriadoSucesso">Estabelecimento criado com sucesso</string>
+    <string name="ErroCriarEstabelecimento">Ocorreu um erro ao criar o estabelecimento</string>
+    <string name="usuarioCriadoSucesso">Usuário criado com sucesso</string>
+    <string name="ErroCriarUsuario">Ocorreu um erro ao criar o usuário</string>
+    <string name="ErroGravarImagem">Ocorreu um erro ao salvar a foto de perfil</string>
+    <string name="InsiraFotoPerfil">Por favor insira uma foto de perfil</string>
+    <string name="EmailSendoUsado">Este e-mail já esta em uso</string>
+    <string name="SenhaFraca">Coloque uma senha mais forte</string>
+    <string name="EmailInvalido">Insira um e-mail válido</string>
 </resources>

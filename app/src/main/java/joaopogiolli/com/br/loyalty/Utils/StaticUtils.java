@@ -1,10 +1,19 @@
 package joaopogiolli.com.br.loyalty.Utils;
 
+import android.content.Context;
+import android.widget.Toast;
+
 /**
  * Created by jlago on 20/02/2018.
  */
 
 public class StaticUtils {
+
+
+    public static void Toast(Context context, String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
     public static final int COD_PHONE = 123;
     public static final int COD_ACCESS_COARSE_LOCATION = 234;
     public static final int COD_ACCESS_FINE_LOCATION = 345;

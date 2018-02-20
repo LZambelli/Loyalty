@@ -197,10 +197,6 @@ public class CadastroActivity extends AppCompatActivity {
         startActivityForResult(intent, StaticUtils.COD_CROP);
     }
 
-    private void Toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
     private void createUserUsuario() {
         firebaseAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(CadastroActivity.this,
                 new OnCompleteListener<AuthResult>() {
@@ -246,7 +242,7 @@ public class CadastroActivity extends AppCompatActivity {
         try {
             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
         } catch (IOException e) {
-            Toast(getString(R.string.ErroGravarImagem));
+            StaticUtils.Toast(this, getString(R.string.ErroGravarImagem));
             e.printStackTrace();
         }
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -265,11 +261,12 @@ public class CadastroActivity extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 progressDialog.dismiss();
                 if (ehEstabelecimento) {
-                    Toast(getString(R.string.estabelecimentoCriadoSucesso));
+                    StaticUtils.Toast(getBaseContext(), getString(R.string.estabelecimentoCriadoSucesso));
                 } else {
-                    Toast(getString(R.string.usuarioCriadoSucesso));
+                    StaticUtils.Toast(getBaseContext(), getString(R.string.usuarioCriadoSucesso));
                 }
                 CadastroActivity.this.finish();
+                FirebaseAuth.getInstance().signOut();
             }
         });
     }
@@ -278,18 +275,18 @@ public class CadastroActivity extends AppCompatActivity {
         switch (error) {
             case StaticUtils.FIREBASE_AUTH_ERROR_EMAIL_ALREADY_IN_USE:
                 progressDialog.dismiss();
-                Toast(getString(R.string.EmailSendoUsado));
+                StaticUtils.Toast(this, getString(R.string.EmailSendoUsado));
                 break;
             case StaticUtils.FIREBASE_AUTH_ERROR_WEAK_PASSWORD:
                 progressDialog.dismiss();
-                Toast(getString(R.string.SenhaFraca));
+                StaticUtils.Toast(this, getString(R.string.SenhaFraca));
                 break;
             case StaticUtils.FIREBASE_AUTH_ERROR_INVALID_EMAIL:
                 progressDialog.dismiss();
-                Toast(getString(R.string.EmailInvalido));
+                StaticUtils.Toast(this, getString(R.string.EmailInvalido));
                 break;
             default:
-                Toast(getString(R.string.ErroCriarUsuario));
+                StaticUtils.Toast(this, getString(R.string.ErroCriarUsuario));
                 progressDialog.dismiss();
                 break;
         }
@@ -314,7 +311,7 @@ public class CadastroActivity extends AppCompatActivity {
         boolean retorno = true;
         if (resultUri == null) {
             retorno = false;
-            Toast(getString(R.string.InsiraFotoPerfil));
+            StaticUtils.Toast(this, getString(R.string.InsiraFotoPerfil));
         }
         if (nome.isEmpty() || nome.equals(null)) {
             retorno = false;

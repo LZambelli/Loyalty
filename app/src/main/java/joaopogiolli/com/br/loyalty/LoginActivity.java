@@ -13,6 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import joaopogiolli.com.br.loyalty.Firebase.FirebaseUtils;
+import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
+
 public class LoginActivity extends AppCompatActivity {
 
     private TextInputLayout textInputLayoutEmailActivityLogin;
@@ -24,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView textViewCadastrarActivityLogin;
     private String email;
     private String senha;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (verificaConexao(this)) {
-            Toast(getString(R.string.naoPossuiConexao));
+            StaticUtils.Toast(this, getString(R.string.naoPossuiConexao));
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth = FirebaseUtils.getFirebaseAuth();
+        if (firebaseAuth.getCurrentUser() != null) {
+            StaticUtils.Toast(this, "VOCE TA LOGADO AMIGÃO");
         }
     }
 
@@ -112,7 +127,4 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void Toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 }

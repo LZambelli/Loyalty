@@ -29,4 +29,6 @@
     <string name="EmailSendoUsado">Este e-mail já esta em uso</string>
     <string name="SenhaFraca">Coloque uma senha mais forte</string>
     <string name="EmailInvalido">Insira um e-mail válido</string>
+    <string name="PreenchaEmail">Preencha o campo de e-mail</string>
+    <string name="RedefinicaoSenha">E-mail de redefinição de senha enviado</string>
 </resources>

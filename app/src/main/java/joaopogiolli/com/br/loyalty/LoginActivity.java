@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (verificaConexao(this)) {
+        if (!verificaConexao(this)) {
             StaticUtils.Toast(this, getString(R.string.naoPossuiConexao));
         }
     }

@@ -137,11 +137,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean verificaConexao(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if ((netInfo != null) && (netInfo.isConnectedOrConnecting()) && (netInfo.isAvailable())) {
-            return true;
-        } else {
-            return false;
-        }
+        return ((netInfo != null) && (netInfo.isConnectedOrConnecting()) && (netInfo.isAvailable()));
     }
 
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/opcoes">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_used_cards"
+                    android:icon="@drawable/ic_menu_used_cards"
+                    android:title="@string/cartoesUsados" />
+                <item
+                    android:id="@+id/nav_cards"
+                    android:icon="@drawable/ic_menu_card"
+                    android:title="@string/cartoesUsados" />
+                <item
+                    android:id="@+id/nav_maps"
+                    android:icon="@drawable/ic_menu_map"
+                    android:title="@string/estabelecimentosProximos" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/conta">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_settings"
+                android:title="@string/configuracao" />
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/ic_menu_exit_to_app"
+                android:title="@string/sair" />
+        </menu>
+    </item>
+
+</menu>

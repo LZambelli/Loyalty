@@ -7,7 +7,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 public class PrincipalUsuarioActivity extends AppCompatActivity
@@ -20,7 +19,7 @@ public class PrincipalUsuarioActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbarActivityUsuarioPrincipal);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawerLayoutActivityUsuarioPrincipal);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -32,7 +31,7 @@ public class PrincipalUsuarioActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawerLayoutActivityUsuarioPrincipal);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -46,10 +45,10 @@ public class PrincipalUsuarioActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_exit) {
+        if (id == R.id.nav_exit_ActivityUsuarioPrincipal) {
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawerLayoutActivityUsuarioPrincipal);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

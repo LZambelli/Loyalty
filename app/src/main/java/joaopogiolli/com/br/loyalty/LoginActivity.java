@@ -12,12 +12,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import joaopogiolli.com.br.loyalty.Firebase.FirebaseUtils;
+import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
+import joaopogiolli.com.br.loyalty.Models.Usuario;
 import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,7 +45,11 @@ public class LoginActivity extends AppCompatActivity {
     private TextView textViewCadastrarActivityLogin;
     private String email;
     private String senha;
+
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +71,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         firebaseAuth = FirebaseUtils.getFirebaseAuth();
+        firebaseDatabase = FirebaseUtils.getFirebaseDatabase(this);
+        databaseReference = FirebaseUtils.getDatabaseReference(firebaseDatabase);
         if (firebaseAuth.getCurrentUser() != null) {
+            escolheTela();
         }
     }
 
@@ -95,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (verificarCampos()) {
-
+                    escolheTela();
                 }
             }
         });
@@ -140,4 +161,88 @@ public class LoginActivity extends AppCompatActivity {
         return ((netInfo != null) && (netInfo.isConnectedOrConnecting()) && (netInfo.isAvailable()));
     }
 
+    private Usuario getUsuario(FirebaseUser firebaseUser) {
+        final List<Usuario> listaUsuario = new ArrayList<>();
+        Query query = databaseReference.child(StaticUtils.TABELA_USUARIO)
+                .orderByChild("id")
+                .equalTo(firebaseUser.getUid());
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        listaUsuario.add(snapshot.getValue(Usuario.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return listaUsuario.get(0);
+    }
+
+    private Estabelecimento getEstabelecimento(FirebaseUser firebaseUser) {
+        final List<Estabelecimento> listaEstabelecimento = new ArrayList<>();
+        Query query = databaseReference.child(StaticUtils.TABELA_ESTABELECIMENTO)
+                .orderByChild("id")
+                .equalTo(firebaseUser.getUid());
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        listaEstabelecimento.add(snapshot.getValue(Estabelecimento.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return listaEstabelecimento.get(0);
+    }
+
+    private void escolheTela(){
+        Usuario usuario = getUsuario(firebaseAuth.getCurrentUser());
+        Estabelecimento estabelecimento = getEstabelecimento(firebaseAuth.getCurrentUser());
+        if (usuario != null) {
+
+        } else if (estabelecimento != null) {
+
+        }
+    }
+
+    private void login(String email, String senha) {
+        firebaseAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(LoginActivity.this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            if (task.isComplete()) {
+                                progressBar.setVisibility(View.GONE);
+                                textViewAutenticando.setVisibility(View.GONE);
+                                Intent intentListaCartoes = new Intent(LoginActivity.this, ListaCartoesActivity.class);
+                                startActivity(intentListaCartoes);
+                                finish();
+                            }
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            textViewAutenticando.setVisibility(View.GONE);
+                            Toast.makeText(LoginActivity.this, getString(R.string.erro_autenticacao),
+                                    Toast.LENGTH_LONG).show();
+                            textInputLayoutSenha.setHintTextAppearance(R.style.TextLabelErrorHint);
+                            textInputLayoutSenha.setError(getString(R.string.erro_autenticacao));
+                        }
+                    }
+                });
+    }
 }

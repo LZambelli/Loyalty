@@ -7,15 +7,15 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_used_cards"
+                    android:id="@+id/nav_used_cards_ActivityUsuarioPrincipal"
                     android:icon="@drawable/ic_menu_used_cards"
                     android:title="@string/cartoesUsados" />
                 <item
-                    android:id="@+id/nav_cards"
+                    android:id="@+id/nav_cards_ActivityUsuarioPrincipal"
                     android:icon="@drawable/ic_menu_card"
                     android:title="@string/cartoesUsados" />
                 <item
-                    android:id="@+id/nav_maps"
+                    android:id="@+id/nav_maps_ActivityUsuarioPrincipal"
                     android:icon="@drawable/ic_menu_map"
                     android:title="@string/estabelecimentosProximos" />
             </group>
@@ -25,11 +25,11 @@
     <item android:title="@string/conta">
         <menu>
             <item
-                android:id="@+id/nav_settings"
+                android:id="@+id/nav_settings_ActivityUsuarioPrincipal"
                 android:icon="@drawable/ic_menu_settings"
                 android:title="@string/configuracao" />
             <item
-                android:id="@+id/nav_exit"
+                android:id="@+id/nav_exit_ActivityUsuarioPrincipal"
                 android:icon="@drawable/ic_menu_exit_to_app"
                 android:title="@string/sair" />
         </menu>

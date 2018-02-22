@@ -47,4 +47,5 @@
     </string>
     <string name="promocoes">Promoções</string>
     <string name="atribuirCarimbo">Atribuir carimbo</string>
+    <string name="erroAutenticacao">Ocorreu um erro na autenticação</string>
 </resources>

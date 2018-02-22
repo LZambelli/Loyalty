@@ -28,4 +28,5 @@ public class StaticUtils {
     public static final String FIREBASE_AUTH_ERROR_EMAIL_ALREADY_IN_USE  = "ERROR_EMAIL_ALREADY_IN_USE";
     public static final String FIREBASE_AUTH_ERROR_WEAK_PASSWORD  = "ERROR_WEAK_PASSWORD";
     public static final String FIREBASE_AUTH_ERROR_INVALID_EMAIL = "ERROR_INVALID_EMAIL";
+    public static final String PUT_EXTRA_TIPO_USUARIO = "TIPO_USUARIO";
 }

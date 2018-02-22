@@ -5,14 +5,16 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,9 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import joaopogiolli.com.br.loyalty.Firebase.FirebaseUtils;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
@@ -45,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView textViewCadastrarActivityLogin;
     private String email;
     private String senha;
+    private ProgressBar progressBarActivityLogin;
+    private TextView textViewAutenticandoActivityLogin;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -74,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseUtils.getFirebaseDatabase(this);
         databaseReference = FirebaseUtils.getDatabaseReference(firebaseDatabase);
         if (firebaseAuth.getCurrentUser() != null) {
-            escolheTela();
+            verificaTipoUsuario();
         }
     }
 
@@ -86,6 +87,8 @@ public class LoginActivity extends AppCompatActivity {
         textViewEsqueceuSenhaActivityLogin = findViewById(R.id.textViewEsqueceuSenhaActivityLogin);
         buttonActivityLogin = findViewById(R.id.buttonActivityLogin);
         textViewCadastrarActivityLogin = findViewById(R.id.textViewCadastrarActivityLogin);
+        progressBarActivityLogin = findViewById(R.id.progressBarActivityLogin);
+        textViewAutenticandoActivityLogin = findViewById(R.id.textViewAutenticandoActivityLogin);
     }
 
     private void initClicks() {
@@ -115,8 +118,12 @@ public class LoginActivity extends AppCompatActivity {
         buttonActivityLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                email = editTextEmail.getText().toString();
+                senha = editTextSenha.getText().toString();
                 if (verificarCampos()) {
-                    escolheTela();
+                    progressBarActivityLogin.setVisibility(View.VISIBLE);
+                    textViewAutenticandoActivityLogin.setVisibility(View.VISIBLE);
+                    login(email, senha);
                 }
             }
         });
@@ -161,8 +168,7 @@ public class LoginActivity extends AppCompatActivity {
         return ((netInfo != null) && (netInfo.isConnectedOrConnecting()) && (netInfo.isAvailable()));
     }
 
-    private Usuario getUsuario(FirebaseUser firebaseUser) {
-        final List<Usuario> listaUsuario = new ArrayList<>();
+    private void getUsuario(FirebaseUser firebaseUser) {
         Query query = databaseReference.child(StaticUtils.TABELA_USUARIO)
                 .orderByChild("id")
                 .equalTo(firebaseUser.getUid());
@@ -171,8 +177,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
+                    Usuario usuario = null;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        listaUsuario.add(snapshot.getValue(Usuario.class));
+                        usuario = snapshot.getValue(Usuario.class);
+                    }
+                    if (usuario != null) {
+                        chamaTela(false, usuario);
                     }
                 }
             }
@@ -182,12 +192,9 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-        return listaUsuario.get(0);
     }
 
-    private Estabelecimento getEstabelecimento(FirebaseUser firebaseUser) {
-        final List<Estabelecimento> listaEstabelecimento = new ArrayList<>();
+    private void getEstabelecimento(FirebaseUser firebaseUser) {
         Query query = databaseReference.child(StaticUtils.TABELA_ESTABELECIMENTO)
                 .orderByChild("id")
                 .equalTo(firebaseUser.getUid());
@@ -196,8 +203,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
+                    Estabelecimento estabelecimento = null;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        listaEstabelecimento.add(snapshot.getValue(Estabelecimento.class));
+                        estabelecimento = snapshot.getValue(Estabelecimento.class);
+                    }
+                    if (estabelecimento != null) {
+                        chamaTela(true, estabelecimento);
                     }
                 }
             }
@@ -208,17 +219,28 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        return listaEstabelecimento.get(0);
     }
 
-    private void escolheTela(){
-        Usuario usuario = getUsuario(firebaseAuth.getCurrentUser());
-        Estabelecimento estabelecimento = getEstabelecimento(firebaseAuth.getCurrentUser());
-        if (usuario != null) {
-
-        } else if (estabelecimento != null) {
-
+    private void chamaTela(boolean ehEstabelecimento, Object tipoUsuario) {
+        progressBarActivityLogin.setVisibility(View.GONE);
+        textViewAutenticandoActivityLogin.setVisibility(View.GONE);
+        finish();
+        if (ehEstabelecimento) {
+            Estabelecimento estabelecimento = (Estabelecimento) tipoUsuario;
+            Intent intentTelaEstabelecimento = new Intent(this, PrincipalEstabelecimentoActivity.class);
+            intentTelaEstabelecimento.putExtra(StaticUtils.PUT_EXTRA_TIPO_USUARIO, estabelecimento);
+            startActivity(intentTelaEstabelecimento);
+        } else {
+            Usuario usuario = (Usuario) tipoUsuario;
+            Intent intentTelaUsuario = new Intent(this, PrincipalUsuarioActivity.class);
+            intentTelaUsuario.putExtra(StaticUtils.PUT_EXTRA_TIPO_USUARIO, usuario);
+            startActivity(intentTelaUsuario);
         }
+    }
+
+    private void verificaTipoUsuario() {
+        getUsuario(firebaseAuth.getCurrentUser());
+        getEstabelecimento(firebaseAuth.getCurrentUser());
     }
 
     private void login(String email, String senha) {
@@ -228,19 +250,14 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             if (task.isComplete()) {
-                                progressBar.setVisibility(View.GONE);
-                                textViewAutenticando.setVisibility(View.GONE);
-                                Intent intentListaCartoes = new Intent(LoginActivity.this, ListaCartoesActivity.class);
-                                startActivity(intentListaCartoes);
-                                finish();
+                                verificaTipoUsuario();
                             }
                         } else {
-                            progressBar.setVisibility(View.GONE);
-                            textViewAutenticando.setVisibility(View.GONE);
-                            Toast.makeText(LoginActivity.this, getString(R.string.erro_autenticacao),
-                                    Toast.LENGTH_LONG).show();
-                            textInputLayoutSenha.setHintTextAppearance(R.style.TextLabelErrorHint);
-                            textInputLayoutSenha.setError(getString(R.string.erro_autenticacao));
+                            progressBarActivityLogin.setVisibility(View.GONE);
+                            textViewAutenticandoActivityLogin.setVisibility(View.GONE);
+                            StaticUtils.Toast(LoginActivity.this, getString(R.string.erroAutenticacao));
+                            textInputLayoutSenhaActivityLogin.setHintTextAppearance(R.style.TextLabelErrorHint);
+                            textInputLayoutSenhaActivityLogin.setError(getString(R.string.erroAutenticacao));
                         }
                     }
                 });

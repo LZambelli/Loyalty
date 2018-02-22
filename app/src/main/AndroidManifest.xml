@@ -36,11 +36,11 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".PrincipalUsuarioActivity"
-            android:label="@string/title_activity_principal_usuario"
+            android:label="@string/seusCartoes"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PrincipalEstabelecimentoActivity"
-            android:label="@string/title_activity_principal_estabelecimento"
+            android:label="@string/suasPromocoes"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

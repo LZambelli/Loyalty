@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -46,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private String senha;
     private ProgressBar progressBarActivityLogin;
     private TextView textViewAutenticandoActivityLogin;
+    private TextView textViewErroLoginActivityLogin;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -75,7 +74,15 @@ public class LoginActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseUtils.getFirebaseDatabase(this);
         databaseReference = FirebaseUtils.getDatabaseReference(firebaseDatabase);
         if (firebaseAuth.getCurrentUser() != null) {
-            verificaTipoUsuario();
+            Usuario usuario = StaticUtils.getUsuarioOnSharedPreferences(this);
+            Estabelecimento estabelecimento = StaticUtils.getEstabelecimentoOnSharedPreferences(this);
+            if (usuario != null) {
+                chamaUsuario(usuario, false);
+            } else if (estabelecimento != null) {
+                chamaEstabelecimento(estabelecimento, false);
+            } else {
+                verificaTipoUsuario();
+            }
         }
     }
 
@@ -89,9 +96,11 @@ public class LoginActivity extends AppCompatActivity {
         textViewCadastrarActivityLogin = findViewById(R.id.textViewCadastrarActivityLogin);
         progressBarActivityLogin = findViewById(R.id.progressBarActivityLogin);
         textViewAutenticandoActivityLogin = findViewById(R.id.textViewAutenticandoActivityLogin);
+        textViewErroLoginActivityLogin = findViewById(R.id.textViewErroLoginActivityLogin);
     }
 
     private void initClicks() {
+
         textViewEsqueceuSenhaActivityLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +132,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (verificarCampos()) {
                     progressBarActivityLogin.setVisibility(View.VISIBLE);
                     textViewAutenticandoActivityLogin.setVisibility(View.VISIBLE);
+                    if (textViewErroLoginActivityLogin.getVisibility() == View.VISIBLE) {
+                        textViewErroLoginActivityLogin.setVisibility(View.GONE);
+                    }
                     login(email, senha);
                 }
             }
@@ -182,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                         usuario = snapshot.getValue(Usuario.class);
                     }
                     if (usuario != null) {
-                        chamaTela(false, usuario);
+                        chamaTela(false, usuario, true);
                     }
                 }
             }
@@ -208,7 +220,7 @@ public class LoginActivity extends AppCompatActivity {
                         estabelecimento = snapshot.getValue(Estabelecimento.class);
                     }
                     if (estabelecimento != null) {
-                        chamaTela(true, estabelecimento);
+                        chamaTela(true, estabelecimento, true);
                     }
                 }
             }
@@ -221,21 +233,37 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void chamaTela(boolean ehEstabelecimento, Object tipoUsuario) {
+    private void chamaTela(boolean ehEstabelecimento, Object tipoUsuario, boolean salvarSharedPrenferences) {
         progressBarActivityLogin.setVisibility(View.GONE);
         textViewAutenticandoActivityLogin.setVisibility(View.GONE);
         finish();
         if (ehEstabelecimento) {
             Estabelecimento estabelecimento = (Estabelecimento) tipoUsuario;
-            Intent intentTelaEstabelecimento = new Intent(this, PrincipalEstabelecimentoActivity.class);
-            intentTelaEstabelecimento.putExtra(StaticUtils.PUT_EXTRA_TIPO_USUARIO, estabelecimento);
-            startActivity(intentTelaEstabelecimento);
+            chamaEstabelecimento(estabelecimento, salvarSharedPrenferences);
         } else {
             Usuario usuario = (Usuario) tipoUsuario;
-            Intent intentTelaUsuario = new Intent(this, PrincipalUsuarioActivity.class);
-            intentTelaUsuario.putExtra(StaticUtils.PUT_EXTRA_TIPO_USUARIO, usuario);
-            startActivity(intentTelaUsuario);
+            chamaUsuario(usuario, salvarSharedPrenferences);
         }
+    }
+
+    private void chamaEstabelecimento(Estabelecimento estabelecimento, boolean salvarSharedPrenferences) {
+        if (salvarSharedPrenferences) {
+            StaticUtils.salvarEstabelecimentoOnSharedPreferences(this, estabelecimento);
+        }
+        Intent intentTelaEstabelecimento = new Intent(this, PrincipalEstabelecimentoActivity.class);
+        intentTelaEstabelecimento.putExtra(StaticUtils.PUT_EXTRA_TIPO_USUARIO, estabelecimento);
+        startActivity(intentTelaEstabelecimento);
+        finish();
+    }
+
+    private void chamaUsuario(Usuario usuario, boolean salvarSharedPrenferences) {
+        if (salvarSharedPrenferences) {
+            StaticUtils.salvarUsuarioOnSharedPreferences(this, usuario);
+        }
+        Intent intentTelaUsuario = new Intent(this, PrincipalUsuarioActivity.class);
+        intentTelaUsuario.putExtra(StaticUtils.PUT_EXTRA_TIPO_USUARIO, usuario);
+        startActivity(intentTelaUsuario);
+        finish();
     }
 
     private void verificaTipoUsuario() {
@@ -256,10 +284,10 @@ public class LoginActivity extends AppCompatActivity {
                             progressBarActivityLogin.setVisibility(View.GONE);
                             textViewAutenticandoActivityLogin.setVisibility(View.GONE);
                             StaticUtils.Toast(LoginActivity.this, getString(R.string.erroAutenticacao));
-                            textInputLayoutSenhaActivityLogin.setHintTextAppearance(R.style.TextLabelErrorHint);
-                            textInputLayoutSenhaActivityLogin.setError(getString(R.string.erroAutenticacao));
+                            textViewErroLoginActivityLogin.setVisibility(View.VISIBLE);
                         }
                     }
                 });
     }
+
 }

@@ -31,7 +31,6 @@
     <string name="EmailInvalido">Insira um e-mail válido</string>
     <string name="PreenchaEmail">Preencha o campo de e-mail</string>
     <string name="RedefinicaoSenha">E-mail de redefinição de senha enviado</string>
-    <string name="title_activity_principal_usuario">PrincipalUsuarioActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -43,9 +42,11 @@
     <string name="cartoesUsados">Cartões usados</string>
     <string name="opcoes">Opções</string>
     <string name="estabelecimentosProximos">Estabelecimentos próximos</string>
-    <string name="title_activity_principal_estabelecimento">PrincipalEstabelecimentoActivity
-    </string>
     <string name="promocoes">Promoções</string>
     <string name="atribuirCarimbo">Atribuir carimbo</string>
     <string name="erroAutenticacao">Ocorreu um erro na autenticação</string>
+    <string name="erroLoginSenha">Login e/ou senha incorretos</string>
+    <string name="seusCartoes">Seus cartões</string>
+    <string name="suasPromocoes">Suas promoções</string>
+
 </resources>

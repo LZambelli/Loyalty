@@ -120,7 +120,7 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         }
     }
 
-    private void initClicks(){
+    private void initClicks() {
         floatingActionButtonActivityEstabelecimentoPrincipal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

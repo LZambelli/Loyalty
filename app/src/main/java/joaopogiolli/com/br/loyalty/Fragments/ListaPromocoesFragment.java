@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -26,11 +29,11 @@ public class ListaPromocoesFragment extends Fragment {
 
         getActivity().setTitle(R.string.suasPromocoes);
         View view = inflater.inflate(R.layout.fragment_lista_promocoes, container, false);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             floatingActionButtonActivityEstabelecimentoPrincipal =
                     getActivity().findViewById(R.id.floatingActionButtonActivityEstabelecimentoPrincipal);
+            registerForContextMenu(view.findViewById(R.id.listViewFragmentListaPromocoes));
             if (floatingActionButtonActivityEstabelecimentoPrincipal.getVisibility() == View.GONE) {
                 floatingActionButtonActivityEstabelecimentoPrincipal.setVisibility(View.VISIBLE);
             }
@@ -42,5 +45,27 @@ public class ListaPromocoesFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        MenuItem deletar = menu.add(getString(R.string.excluir));
+        deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+
+        MenuItem editar = menu.add(getString(R.string.editar));
+        editar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+
+
     }
 }

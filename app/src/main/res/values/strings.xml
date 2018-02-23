@@ -54,5 +54,7 @@
     <string name="erroValorInvalido">Valor inválido</string>
     <string name="criandoPromocao">Estamos criando sua promoção...</string>
     <string name="PromocaoCriadaSucesso">Promoção criada com sucesso</string>
+    <string name="excluir">Excluir</string>
+    <string name="editar">Editar</string>
 
 </resources>

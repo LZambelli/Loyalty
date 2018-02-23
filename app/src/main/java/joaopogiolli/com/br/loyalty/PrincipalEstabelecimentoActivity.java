@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import joaopogiolli.com.br.loyalty.Firebase.FirebaseUtils;
+import joaopogiolli.com.br.loyalty.Fragments.CadastroPromocaoFragment;
 import joaopogiolli.com.br.loyalty.Fragments.ListaPromocoesFragment;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
 import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
@@ -48,6 +51,8 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private FloatingActionButton floatingActionButtonActivityEstabelecimentoPrincipal;
+    private ActionBar actionBar;
+    private boolean mToolBarNavigationListenerIsRegistered = false;
 
     private Estabelecimento estabelecimento;
 
@@ -61,6 +66,9 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         setContentView(R.layout.activity_principal_estabelecimento);
         initViews();
         initClicks();
+        if (savedInstanceState != null) {
+            resolveUpButtonWithFragmentStack();
+        }
     }
 
     @Override
@@ -75,13 +83,49 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        Fragment ultimoFragment = geFragmentAtual();
+        if (ultimoFragment != null) {
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal, ultimoFragment);
+            fragmentTransaction.commit();
+            if (ultimoFragment.getTag() == StaticUtils.FRAGMENT_CADASTRO_PROMOCAO) {
+                if (floatingActionButtonActivityEstabelecimentoPrincipal.getVisibility() == View.GONE) {
+                    floatingActionButtonActivityEstabelecimentoPrincipal.setVisibility(View.GONE);
+                }
+            }
+        }
+        super.onResume();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawerLayoutActivityEstabelecimentoPrincipal);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+
+            if (backStackCount >= 1) {
+                getSupportFragmentManager().popBackStack();
+                if (backStackCount == 1) {
+                    showUpButton(false);
+                }
+            } else {
+                super.onBackPressed();
+            }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -104,6 +148,7 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
     private void initViews() {
         toolbar = findViewById(R.id.toolbarActivityEstabelecimentoPrincipal);
         setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
 
         drawer = findViewById(R.id.drawerLayoutActivityEstabelecimentoPrincipal);
         toggle = new ActionBarDrawerToggle(
@@ -128,13 +173,20 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         }
 
         fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
     }
 
     private void initClicks() {
         floatingActionButtonActivityEstabelecimentoPrincipal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showUpButton(true);
+                floatingActionButtonActivityEstabelecimentoPrincipal.setVisibility(View.GONE);
+                CadastroPromocaoFragment cadastroPromocaoFragment = new CadastroPromocaoFragment();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal,
+                        cadastroPromocaoFragment, StaticUtils.FRAGMENT_CADASTRO_PROMOCAO);
+                fragmentTransaction.addToBackStack(StaticUtils.FRAGMENT_CADASTRO_PROMOCAO);
+                fragmentTransaction.commit();
             }
         });
     }
@@ -163,13 +215,52 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         textViewEmailActivityEstabelecimentoPrincipal.setText(estabelecimento.getEmail());
     }
 
-    private void setFragment(){
+    private void setFragment() {
         ListaPromocoesFragment listaPromocoesFragment = new ListaPromocoesFragment();
         Bundle bundle = new Bundle();
         bundle.putString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO, new Gson().toJson(estabelecimento));
+        bundle.putString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO, new Gson().toJson(estabelecimento));
         listaPromocoesFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal, listaPromocoesFragment);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal,
+                listaPromocoesFragment, StaticUtils.FRAGMENT_LISTA_PROMOCOES);
         fragmentTransaction.commit();
+    }
+
+    private void resolveUpButtonWithFragmentStack() {
+        showUpButton(getSupportFragmentManager().getBackStackEntryCount() > 0);
+    }
+
+    private void showUpButton(boolean show) {
+        if (show) {
+            toggle.setDrawerIndicatorEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            if (!mToolBarNavigationListenerIsRegistered) {
+                toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onBackPressed();
+                    }
+                });
+
+                mToolBarNavigationListenerIsRegistered = true;
+            }
+
+        } else {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            toggle.setDrawerIndicatorEnabled(true);
+            toggle.setToolbarNavigationClickListener(null);
+            mToolBarNavigationListenerIsRegistered = false;
+        }
+    }
+
+    private Fragment geFragmentAtual() {
+        Fragment currentFragment = null;
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+            currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
+        }
+        return currentFragment;
     }
 
 }

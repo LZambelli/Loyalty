@@ -12,6 +12,7 @@ public class Promocao implements Serializable {
     private String idEstabelecimento;
     private String titulo;
     private String descricao;
+    private int quantidadeCarimbos;
     private String dataCricao;
 
     public String getId() {
@@ -44,6 +45,14 @@ public class Promocao implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public int getQuantidadeCarimbos() {
+        return quantidadeCarimbos;
+    }
+
+    public void setQuantidadeCarimbos(int quantidadeCarimbos) {
+        this.quantidadeCarimbos = quantidadeCarimbos;
     }
 
     public String getDataCricao() {

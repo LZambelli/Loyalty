@@ -30,7 +30,7 @@
             app:errorEnabled="true">
 
             <EditText
-                android:id="@+id/editTextEmail"
+                android:id="@+id/editTextEmailActivityLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hintEmail"
@@ -47,7 +47,7 @@
             app:passwordToggleEnabled="true">
 
             <EditText
-                android:id="@+id/editTextSenha"
+                android:id="@+id/editTextSenhaActivityLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hintSenha"

@@ -41,7 +41,7 @@
         <activity
             android:name=".PrincipalEstabelecimentoActivity"
             android:label="@string/suasPromocoes"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

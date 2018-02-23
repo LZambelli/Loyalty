@@ -33,6 +33,8 @@ public class StaticUtils {
     public static final String PUT_EXTRA_TIPO_USUARIO = "TIPO_USUARIO";
     public static final String PUT_EXTRA_TIPO_ESTABELECIMENTO = "TIPO_ESTABELECIMENTO";
     public static final String IMAGEM_PERFIL = "IMAGEM_PERFIL";
+    public static final String FRAGMENT_LISTA_PROMOCOES = "FRAGMENT_LISTA_PROMOCOES";
+    public static final String FRAGMENT_CADASTRO_PROMOCAO = "FRAGMENT_CADASTRO_PROMOCAO";
 
     public static void Toast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();

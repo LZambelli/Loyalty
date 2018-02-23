@@ -88,9 +88,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initView() {
         textInputLayoutEmailActivityLogin = findViewById(R.id.textInputLayoutEmailActivityLogin);
-        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextEmail = findViewById(R.id.editTextEmailActivityLogin);
         textInputLayoutSenhaActivityLogin = findViewById(R.id.textInputLayoutSenhaActivityLogin);
-        editTextSenha = findViewById(R.id.editTextSenha);
+        editTextSenha = findViewById(R.id.editTextSenhaActivityLogin);
         textViewEsqueceuSenhaActivityLogin = findViewById(R.id.textViewEsqueceuSenhaActivityLogin);
         buttonActivityLogin = findViewById(R.id.buttonActivityLogin);
         textViewCadastrarActivityLogin = findViewById(R.id.textViewCadastrarActivityLogin);

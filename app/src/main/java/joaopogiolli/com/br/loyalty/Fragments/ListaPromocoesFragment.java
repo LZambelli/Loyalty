@@ -1,7 +1,9 @@
 package joaopogiolli.com.br.loyalty.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
 public class ListaPromocoesFragment extends Fragment {
 
     private Estabelecimento estabelecimento;
+    private FloatingActionButton floatingActionButtonActivityEstabelecimentoPrincipal;
 
     @Nullable
     @Override
@@ -26,6 +29,11 @@ public class ListaPromocoesFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
+            floatingActionButtonActivityEstabelecimentoPrincipal =
+                    getActivity().findViewById(R.id.floatingActionButtonActivityEstabelecimentoPrincipal);
+            if (floatingActionButtonActivityEstabelecimentoPrincipal.getVisibility() == View.GONE) {
+                floatingActionButtonActivityEstabelecimentoPrincipal.setVisibility(View.VISIBLE);
+            }
             estabelecimento = new Gson()
                     .fromJson(bundle.getString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO), Estabelecimento.class);
             AssyncTaskListaPromocoesAdapter assyncTaskListaPromocoesAdapter

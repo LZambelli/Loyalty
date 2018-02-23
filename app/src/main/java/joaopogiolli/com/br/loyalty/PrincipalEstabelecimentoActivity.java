@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,8 +24,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 
 import joaopogiolli.com.br.loyalty.Firebase.FirebaseUtils;
+import joaopogiolli.com.br.loyalty.Fragments.ListaPromocoesFragment;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
 import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
 
@@ -35,6 +39,9 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
     private FirebaseUser firebaseUser;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageDatabase;
+
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -64,6 +71,7 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         firebaseUser = FirebaseUtils.getFirebaseUser();
         firebaseStorage = FirebaseUtils.getFirebaseStorage();
         verificaEstabelecimento();
+        setFragment();
     }
 
     @Override
@@ -118,6 +126,9 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         if (extras != null) {
             estabelecimento = (Estabelecimento) extras.get(StaticUtils.PUT_EXTRA_TIPO_USUARIO);
         }
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
     }
 
     private void initClicks() {
@@ -150,6 +161,15 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         }
         textViewNomeActivityEstabelecimentoPrincipal.setText(estabelecimento.getNome());
         textViewEmailActivityEstabelecimentoPrincipal.setText(estabelecimento.getEmail());
+    }
+
+    private void setFragment(){
+        ListaPromocoesFragment listaPromocoesFragment = new ListaPromocoesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO, new Gson().toJson(estabelecimento));
+        listaPromocoesFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal, listaPromocoesFragment);
+        fragmentTransaction.commit();
     }
 
 }

@@ -11,7 +11,11 @@
     <FrameLayout
         android:id="@+id/FrameLayoutActivityEstabelecimentoPrincipal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"></FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButtonActivityEstabelecimentoPrincipal"

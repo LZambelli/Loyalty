@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getUsuario(FirebaseUser firebaseUser) {
         Query query = databaseReference.child(StaticUtils.TABELA_USUARIO)
-                .orderByChild("id")
+                .orderByChild(StaticUtils.ID)
                 .equalTo(firebaseUser.getUid());
 
         query.addValueEventListener(new ValueEventListener() {
@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getEstabelecimento(FirebaseUser firebaseUser) {
         Query query = databaseReference.child(StaticUtils.TABELA_ESTABELECIMENTO)
-                .orderByChild("id")
+                .orderByChild(StaticUtils.ID)
                 .equalTo(firebaseUser.getUid());
 
         query.addValueEventListener(new ValueEventListener() {

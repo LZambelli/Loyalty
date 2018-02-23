@@ -22,8 +22,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
@@ -96,6 +99,7 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
             }
         }
         super.onResume();
+        initListenners();
     }
 
     @Override
@@ -175,6 +179,28 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
     }
 
+    private void initListenners() {
+        databaseReference
+                .child(StaticUtils.TABELA_ESTABELECIMENTO)
+                .orderByChild(StaticUtils.ID)
+                .equalTo(firebaseUser.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot != null) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                estabelecimento = snapshot.getValue(Estabelecimento.class);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     private void initClicks() {
         floatingActionButtonActivityEstabelecimentoPrincipal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,6 +208,9 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
                 showUpButton(true);
                 floatingActionButtonActivityEstabelecimentoPrincipal.setVisibility(View.GONE);
                 CadastroPromocaoFragment cadastroPromocaoFragment = new CadastroPromocaoFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO, new Gson().toJson(estabelecimento));
+                cadastroPromocaoFragment.setArguments(bundle);
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal,
                         cadastroPromocaoFragment, StaticUtils.FRAGMENT_CADASTRO_PROMOCAO);
@@ -218,7 +247,6 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
     private void setFragment() {
         ListaPromocoesFragment listaPromocoesFragment = new ListaPromocoesFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO, new Gson().toJson(estabelecimento));
         bundle.putString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO, new Gson().toJson(estabelecimento));
         listaPromocoesFragment.setArguments(bundle);
         fragmentTransaction = fragmentManager.beginTransaction();

@@ -58,8 +58,8 @@ public class AssyncTaskListaPromocoesAdapter extends AsyncTask<Void, Void, Void>
     @Override
     protected Void doInBackground(Void... voids) {
         databaseReference
-                .child(StaticUtils.TABELA_CARTAOES)
-                .orderByChild("idUsuario")
+                .child(StaticUtils.TABELA_PROMOCAO)
+                .orderByChild(StaticUtils.ID_ESTABELECIMENTO)
                 .equalTo(estabelecimento.getId())
                 .addValueEventListener(new ValueEventListener() {
                     @Override

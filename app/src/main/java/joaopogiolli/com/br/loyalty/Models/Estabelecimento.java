@@ -15,6 +15,7 @@ public class Estabelecimento implements Serializable {
     private String celular;
     private String endereco;
     private String descricao;
+    private int qntPromocoes;
 
     public Estabelecimento() {
     }
@@ -74,4 +75,13 @@ public class Estabelecimento implements Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public int getQntPromocoes() {
+        return qntPromocoes;
+    }
+
+    public void setQntPromocoes(int qntPromocoes) {
+        this.qntPromocoes = qntPromocoes;
+    }
+
 }

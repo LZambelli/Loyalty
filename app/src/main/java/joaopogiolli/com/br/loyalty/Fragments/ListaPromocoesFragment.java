@@ -1,6 +1,5 @@
 package joaopogiolli.com.br.loyalty.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +24,7 @@ public class ListaPromocoesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        getActivity().setTitle(R.string.suasPromocoes);
         View view = inflater.inflate(R.layout.fragment_lista_promocoes, container, false);
 
         Bundle bundle = getArguments();

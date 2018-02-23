@@ -172,7 +172,7 @@ public class CadastroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (verificaCampos()) {
                     progressDialog.setTitle(getString(R.string.aguarde));
-                    progressDialog.setMessage(getString(R.string.criando_perfil));
+                    progressDialog.setMessage(getString(R.string.criandoPerfil));
                     progressDialog.show();
                     if (ehEstabelecimento) {
                         createUserEstabelecimento();
@@ -383,6 +383,7 @@ public class CadastroActivity extends AppCompatActivity {
         estabelecimento.setCelular(celular);
         estabelecimento.setEndereco(endereco);
         estabelecimento.setDescricao(descricao);
+        estabelecimento.setQntPromocoes(0);
         return estabelecimento;
     }
 

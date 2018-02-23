@@ -18,7 +18,7 @@
     <string name="naoPossuiConexao">Você não possui conexão com internet</string>
     <string name="erroPreenchimentoObrigatorio">Campo de preenchimento obrigatório</string>
     <string name="preenchaTodosOsCampos">Preencha todos os campos indicados</string>
-    <string name="criando_perfil">Estamos criando seu perfil...</string>
+    <string name="criandoPerfil">Estamos criando seu perfil...</string>
     <string name="aguarde">Aguarde</string>
     <string name="estabelecimentoCriadoSucesso">Estabelecimento criado com sucesso</string>
     <string name="ErroCriarEstabelecimento">Ocorreu um erro ao criar o estabelecimento</string>
@@ -31,10 +31,8 @@
     <string name="EmailInvalido">Insira um e-mail válido</string>
     <string name="PreenchaEmail">Preencha o campo de e-mail</string>
     <string name="RedefinicaoSenha">E-mail de redefinição de senha enviado</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
     <string name="conta">Conta</string>
     <string name="configuracao">Configurações</string>
@@ -48,13 +46,13 @@
     <string name="erroLoginSenha">Login e/ou senha incorretos</string>
     <string name="seusCartoes">Seus cartões</string>
     <string name="suasPromocoes">Suas promoções</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="naoPossuiPromocoes">Seu estabelecimento ainda não possui nenhuma promoção cadastrada :-(</string>
     <string name="tituoPromocao">Digite o título da promoção</string>
     <string name="descricaoPromocao">Digite uma descrição</string>
     <string name="qntCarimbos">Quantidade de carimbos necessários</string>
-    <string name="title_activity_dddddd_main">ddddddMainActivity</string>
+    <string name="cadastroPromocao">Cadastro de promoção</string>
+    <string name="erroValorInvalido">Valor inválido</string>
+    <string name="criandoPromocao">Estamos criando sua promoção...</string>
+    <string name="PromocaoCriadaSucesso">Promoção criada com sucesso</string>
 
 </resources>

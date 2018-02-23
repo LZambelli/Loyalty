@@ -35,6 +35,9 @@ public class StaticUtils {
     public static final String IMAGEM_PERFIL = "IMAGEM_PERFIL";
     public static final String FRAGMENT_LISTA_PROMOCOES = "FRAGMENT_LISTA_PROMOCOES";
     public static final String FRAGMENT_CADASTRO_PROMOCAO = "FRAGMENT_CADASTRO_PROMOCAO";
+    public static final String ID = "id";
+    public static final String ID_ESTABELECIMENTO = "idEstabelecimento";
+    public static final String QNT_PROMOCOES = "qntPromocoes";
 
     public static void Toast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();

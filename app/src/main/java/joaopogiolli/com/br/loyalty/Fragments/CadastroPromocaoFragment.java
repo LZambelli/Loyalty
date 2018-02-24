@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import joaopogiolli.com.br.loyalty.AssyncTasks.AssyncTaskCadastraPromocao;
+import joaopogiolli.com.br.loyalty.AssyncTasks.AsyncTaskCadastraPromocao;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
 import joaopogiolli.com.br.loyalty.Models.Promocao;
 import joaopogiolli.com.br.loyalty.R;
@@ -145,9 +145,9 @@ public class CadastroPromocaoFragment extends Fragment {
     }
 
     private void cadastraPromocao() {
-        AssyncTaskCadastraPromocao assyncTaskCadastraPromocao =
-                new AssyncTaskCadastraPromocao(getContext(), promocao, estabelecimento);
-        assyncTaskCadastraPromocao.execute();
+        AsyncTaskCadastraPromocao asyncTaskCadastraPromocao =
+                new AsyncTaskCadastraPromocao(getContext(), promocao, estabelecimento);
+        asyncTaskCadastraPromocao.execute();
     }
 
 }

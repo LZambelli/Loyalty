@@ -56,4 +56,9 @@ public class Usuario implements Serializable {
     public void setCelular(String celular) {
         this.celular = celular;
     }
+
+    @Override
+    public String toString() {
+        return this.nome;
+    }
 }

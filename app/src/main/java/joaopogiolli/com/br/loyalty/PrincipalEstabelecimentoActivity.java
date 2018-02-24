@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import joaopogiolli.com.br.loyalty.Firebase.FirebaseUtils;
+import joaopogiolli.com.br.loyalty.Fragments.BuscaUsuarioFragment;
 import joaopogiolli.com.br.loyalty.Fragments.CadastroPromocaoFragment;
 import joaopogiolli.com.br.loyalty.Fragments.ListaPromocoesFragment;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
@@ -138,10 +139,22 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_exit_ActivityEstabelecimentoPrincipal) {
-            FirebaseUtils.logOut();
-            StaticUtils.deleteOnSharedPreferences(this, StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO);
-            finish();
+        switch (id) {
+            case R.id.nav_exit_ActivityEstabelecimentoPrincipal:
+                FirebaseUtils.logOut();
+                StaticUtils.deleteOnSharedPreferences(this, StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO);
+                finish();
+                break;
+            case R.id.nav_users_cards_ActivityEstabelecimentoPrincipal:
+                showUpButton(true);
+                BuscaUsuarioFragment buscaUsuarioFragment = new BuscaUsuarioFragment();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal,
+                        buscaUsuarioFragment, StaticUtils.FRAGMENT_BUSCA_USUARIO);
+                if (geFragmentAtual() != null) {
+                    fragmentTransaction.addToBackStack(geFragmentAtual().getTag());
+                }
+                fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawerLayoutActivityEstabelecimentoPrincipal);

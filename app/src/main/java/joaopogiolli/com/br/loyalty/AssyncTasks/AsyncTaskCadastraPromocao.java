@@ -21,7 +21,7 @@ import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
  * Created by jlago on 23/02/2018.
  */
 
-public class AssyncTaskCadastraPromocao extends AsyncTask<Void, Void, Void> {
+public class AsyncTaskCadastraPromocao extends AsyncTask<Void, Void, Void> {
 
     private Promocao promocao;
     private Estabelecimento estabelecimento;
@@ -30,7 +30,7 @@ public class AssyncTaskCadastraPromocao extends AsyncTask<Void, Void, Void> {
     private FirebaseDatabase firebaseDatabase;
     private Context context;
 
-    public AssyncTaskCadastraPromocao(Context context, Promocao promocao, Estabelecimento estabelecimento) {
+    public AsyncTaskCadastraPromocao(Context context, Promocao promocao, Estabelecimento estabelecimento) {
         this.promocao = promocao;
         this.context = context;
         this.estabelecimento = estabelecimento;

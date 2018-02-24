@@ -9,11 +9,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import joaopogiolli.com.br.loyalty.AssyncTasks.AssyncTaskListaPromocoesAdapter;
+import joaopogiolli.com.br.loyalty.AssyncTasks.AsyncTaskListaPromocoesAdapter;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
 import joaopogiolli.com.br.loyalty.R;
 import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
@@ -39,9 +38,9 @@ public class ListaPromocoesFragment extends Fragment {
             }
             estabelecimento = new Gson()
                     .fromJson(bundle.getString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO), Estabelecimento.class);
-            AssyncTaskListaPromocoesAdapter assyncTaskListaPromocoesAdapter
-                    = new AssyncTaskListaPromocoesAdapter(getContext(), estabelecimento, view);
-            assyncTaskListaPromocoesAdapter.execute();
+            AsyncTaskListaPromocoesAdapter asyncTaskListaPromocoesAdapter
+                    = new AsyncTaskListaPromocoesAdapter(getContext(), estabelecimento, view);
+            asyncTaskListaPromocoesAdapter.execute();
         }
 
         return view;

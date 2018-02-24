@@ -27,7 +27,7 @@ import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
  * Created by Joao Poggioli on 22/02/2018.
  */
 
-public class AssyncTaskListaPromocoesAdapter extends AsyncTask<Void, Void, Void> {
+public class AsyncTaskListaPromocoesAdapter extends AsyncTask<Void, Void, Void> {
 
     private Context context;
     private Estabelecimento estabelecimento;
@@ -38,7 +38,7 @@ public class AssyncTaskListaPromocoesAdapter extends AsyncTask<Void, Void, Void>
     private ProgressBar progressBarFragmentListaPromocoes;
     private TextView textViewSemPromocoesFragmentListaPromocoes;
 
-    public AssyncTaskListaPromocoesAdapter(Context context, Estabelecimento estabelecimento, View view) {
+    public AsyncTaskListaPromocoesAdapter(Context context, Estabelecimento estabelecimento, View view) {
         this.estabelecimento = estabelecimento;
         this.context = context;
         firebaseDatabase = FirebaseUtils.getFirebaseDatabase(context);

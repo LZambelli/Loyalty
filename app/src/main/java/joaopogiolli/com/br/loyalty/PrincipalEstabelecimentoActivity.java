@@ -151,9 +151,7 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal,
                         buscaUsuarioFragment, StaticUtils.FRAGMENT_BUSCA_USUARIO);
-                if (geFragmentAtual() != null) {
-                    fragmentTransaction.addToBackStack(geFragmentAtual().getTag());
-                }
+                    fragmentTransaction.addToBackStack(StaticUtils.FRAGMENT_BUSCA_USUARIO);
                 fragmentTransaction.commit();
         }
 

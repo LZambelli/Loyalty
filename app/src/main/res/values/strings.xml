@@ -57,5 +57,7 @@
     <string name="excluir">Excluir</string>
     <string name="editar">Editar</string>
     <string name="buscarUsuario">Digite o e-mail do usuario</string>
+    <string name="atribuindoCarimbo">Atribuindo carimbo...</string>
+    <string name="carimboAtribuidoSucesso">Carimbo atribuido com sucesso</string>
 
 </resources>

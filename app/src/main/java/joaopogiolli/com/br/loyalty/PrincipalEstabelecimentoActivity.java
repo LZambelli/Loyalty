@@ -14,9 +14,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,6 +39,7 @@ import joaopogiolli.com.br.loyalty.Fragments.BuscaUsuarioFragment;
 import joaopogiolli.com.br.loyalty.Fragments.CadastroPromocaoFragment;
 import joaopogiolli.com.br.loyalty.Fragments.ListaPromocoesFragment;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
+import joaopogiolli.com.br.loyalty.Models.Promocao;
 import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
 
 public class PrincipalEstabelecimentoActivity extends AppCompatActivity
@@ -63,6 +67,8 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
     private ImageView imageViewFotoActivityEstabelecimentoPrincipal;
     private TextView textViewNomeActivityEstabelecimentoPrincipal;
     private TextView textViewEmailActivityEstabelecimentoPrincipal;
+    private ListView listViewFragmentListaPromocoes;
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +94,7 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        Fragment ultimoFragment = geFragmentAtual();
+        Fragment ultimoFragment = getFragmentAtual();
         if (ultimoFragment != null) {
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal, ultimoFragment);
@@ -146,13 +152,7 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
                 finish();
                 break;
             case R.id.nav_users_cards_ActivityEstabelecimentoPrincipal:
-                showUpButton(true);
-                BuscaUsuarioFragment buscaUsuarioFragment = new BuscaUsuarioFragment();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal,
-                        buscaUsuarioFragment, StaticUtils.FRAGMENT_BUSCA_USUARIO);
-                    fragmentTransaction.addToBackStack(StaticUtils.FRAGMENT_BUSCA_USUARIO);
-                fragmentTransaction.commit();
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawerLayoutActivityEstabelecimentoPrincipal);
@@ -293,13 +293,59 @@ public class PrincipalEstabelecimentoActivity extends AppCompatActivity
         }
     }
 
-    private Fragment geFragmentAtual() {
+    private Fragment getFragmentAtual() {
         Fragment currentFragment = null;
         if (fragmentManager.getBackStackEntryCount() > 0) {
             String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
             currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
+        } else if(fragmentManager.getBackStackEntryCount() == 0){
+            currentFragment = fragmentManager.findFragmentByTag(StaticUtils.FRAGMENT_LISTA_PROMOCOES);
         }
         return currentFragment;
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, final ContextMenu.ContextMenuInfo menuInfo) {
+
+        MenuItem deletar = menu.add(0, 1, 0, getString(R.string.excluir));
+        deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+
+        MenuItem editar = menu.add(0, 2, 0, getString(R.string.editar));
+        editar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+
+        MenuItem atribuirCarimbo = menu.add(0, 3, 0, getString(R.string.atribuirCarimbo));
+        atribuirCarimbo.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Fragment fragmentAtual = getFragmentAtual();
+                View view = fragmentAtual.getView();
+                if (view != null) {
+                    listViewFragmentListaPromocoes = view.findViewById(R.id.listViewFragmentListaPromocoes);
+                }
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                Promocao promocao = (Promocao) listViewFragmentListaPromocoes.getItemAtPosition(info.position);
+                showUpButton(true);
+                BuscaUsuarioFragment buscaUsuarioFragment = new BuscaUsuarioFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticUtils.PUT_EXTRA_TIPO_PROMOCAO, new Gson().toJson(promocao));
+                buscaUsuarioFragment.setArguments(bundle);
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.FrameLayoutActivityEstabelecimentoPrincipal,
+                        buscaUsuarioFragment, StaticUtils.FRAGMENT_BUSCA_USUARIO);
+                fragmentTransaction.addToBackStack(StaticUtils.FRAGMENT_BUSCA_USUARIO);
+                fragmentTransaction.commit();
+                return true;
+            }
+        });
+    }
 }

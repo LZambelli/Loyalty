@@ -9,11 +9,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 
 import joaopogiolli.com.br.loyalty.AssyncTasks.AsyncTaskListaPromocoesAdapter;
 import joaopogiolli.com.br.loyalty.Models.Estabelecimento;
+import joaopogiolli.com.br.loyalty.Models.Promocao;
 import joaopogiolli.com.br.loyalty.R;
 import joaopogiolli.com.br.loyalty.Utils.StaticUtils;
 
@@ -21,6 +24,7 @@ public class ListaPromocoesFragment extends Fragment {
 
     private Estabelecimento estabelecimento;
     private FloatingActionButton floatingActionButtonActivityEstabelecimentoPrincipal;
+    private ListView listViewFragmentListaPromocoes;
 
     @Nullable
     @Override
@@ -30,41 +34,22 @@ public class ListaPromocoesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_lista_promocoes, container, false);
         Bundle bundle = getArguments();
         if (bundle != null) {
+
             floatingActionButtonActivityEstabelecimentoPrincipal =
                     getActivity().findViewById(R.id.floatingActionButtonActivityEstabelecimentoPrincipal);
             registerForContextMenu(view.findViewById(R.id.listViewFragmentListaPromocoes));
+            listViewFragmentListaPromocoes = view.findViewById(R.id.listViewFragmentListaPromocoes);
             if (floatingActionButtonActivityEstabelecimentoPrincipal.getVisibility() == View.GONE) {
                 floatingActionButtonActivityEstabelecimentoPrincipal.setVisibility(View.VISIBLE);
             }
             estabelecimento = new Gson()
                     .fromJson(bundle.getString(StaticUtils.PUT_EXTRA_TIPO_ESTABELECIMENTO), Estabelecimento.class);
             AsyncTaskListaPromocoesAdapter asyncTaskListaPromocoesAdapter
-                    = new AsyncTaskListaPromocoesAdapter(getContext(), estabelecimento, view);
+                    = new AsyncTaskListaPromocoesAdapter(getContext(), estabelecimento, view, listViewFragmentListaPromocoes);
             asyncTaskListaPromocoesAdapter.execute();
         }
 
         return view;
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-
-        MenuItem deletar = menu.add(getString(R.string.excluir));
-        deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
-            }
-        });
-
-        MenuItem editar = menu.add(getString(R.string.editar));
-        editar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
-            }
-        });
-
-
-    }
 }

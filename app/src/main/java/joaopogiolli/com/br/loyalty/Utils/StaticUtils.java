@@ -41,6 +41,9 @@ public class StaticUtils {
     public static final String FRAGMENT_BUSCA_USUARIO = "FRAGMENT_BUSCA_USUARIO";
     public static final String EMAIL = "email";
     public static final String UF8FF = "\uf8ff";
+    public static final String PUT_EXTRA_TIPO_PROMOCAO = "TIPO_PROMOCAO";
+    public static final String ID_USUARIO = "idUsuario";
+    public static final String QNT_CARIMBOS = "qntCarimbos";
 
     public static void Toast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();

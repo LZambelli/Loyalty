@@ -38,13 +38,13 @@ public class AsyncTaskListaPromocoesAdapter extends AsyncTask<Void, Void, Void> 
     private ProgressBar progressBarFragmentListaPromocoes;
     private TextView textViewSemPromocoesFragmentListaPromocoes;
 
-    public AsyncTaskListaPromocoesAdapter(Context context, Estabelecimento estabelecimento, View view) {
+    public AsyncTaskListaPromocoesAdapter(Context context, Estabelecimento estabelecimento, View view, ListView listViewFragmentListaPromocoes) {
         this.estabelecimento = estabelecimento;
         this.context = context;
         firebaseDatabase = FirebaseUtils.getFirebaseDatabase(context);
         databaseReference = FirebaseUtils.getDatabaseReference(firebaseDatabase);
         progressBarFragmentListaPromocoes = view.findViewById(R.id.progressBarFragmentListaPromocoes);
-        listViewFragmentListaPromocoes = view.findViewById(R.id.listViewFragmentListaPromocoes);
+        this.listViewFragmentListaPromocoes = listViewFragmentListaPromocoes;
         textViewSemPromocoesFragmentListaPromocoes = view.findViewById(R.id.textViewSemPromocoesFragmentListaPromocoes);
         listaPromocao = new ArrayList<>();
     }
@@ -91,5 +91,4 @@ public class AsyncTaskListaPromocoesAdapter extends AsyncTask<Void, Void, Void> 
             textViewSemPromocoesFragmentListaPromocoes.setVisibility(View.VISIBLE);
         }
     }
-
 }

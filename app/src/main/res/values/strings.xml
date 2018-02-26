@@ -59,5 +59,6 @@
     <string name="buscarUsuario">Digite o e-mail do usuario</string>
     <string name="atribuindoCarimbo">Atribuindo carimbo...</string>
     <string name="carimboAtribuidoSucesso">Carimbo atribuido com sucesso</string>
+    <string name="naoPossuiCartoes">Você ainda não possui nenhum cartão fidelidade :-(</string>
 
 </resources>

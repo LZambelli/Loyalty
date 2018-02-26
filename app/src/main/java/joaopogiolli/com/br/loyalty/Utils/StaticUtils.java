@@ -44,6 +44,7 @@ public class StaticUtils {
     public static final String PUT_EXTRA_TIPO_PROMOCAO = "TIPO_PROMOCAO";
     public static final String ID_USUARIO = "idUsuario";
     public static final String QNT_CARIMBOS = "qntCarimbos";
+    public static final String FRAGMENT_LISTA_CARTOES = "FRAGMENT_LISTA_CARTOES";
 
     public static void Toast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
